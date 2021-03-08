@@ -9,34 +9,10 @@ on:
 jobs:
   build:
 
-    runs-on: php:5.6-cli-alpine
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
 
-    - name: Validate composer.json and composer.lock
-      run: composer validate --strict
-
-    - name: Cache Composer packages
-      id: composer-cache
-      uses: actions/cache@v2
-      with:
-        path: vendor
-        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-php-
-
-    - name: Install dependencies
-      run: composer install --prefer-dist --no-progress --no-suggest --dev
-
-    # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
-    # Docs: https://getcomposer.org/doc/articles/scripts.md
-
-    - name: Run test suite
-      run: vendor/bin/phpunit
-
-
-
-
-
-
+    - name: Run all
+      run: docker run --rm php:5.6-cli-alpine 'composer install --dev;vendor/bin/phpunit'
